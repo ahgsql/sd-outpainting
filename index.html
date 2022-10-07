@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Out</title>
+    <style>
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .interact {
+        position: absolute;
+        z-index: 5;
+        background-color: whitesmoke;
+        padding: 15pt;
+        border-radius: 10%;
+        left: 29%;
+        top: 10px;
+        width: 50%;
+        font-size: 15pt;
+      }
+      .interact input {
+        width: 90%;
+        font-size: 15pt;
+      }
+      .interact button {
+        font-size: 15pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="interact">
+      <input type="text" style="" id="prompt" />
+      <button id="send">Predict</button>
+    </div>
+    <div id="container" style="background-color: azure; padding: none"></div>
+    <script src="konva.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="stage.js"></script>
+    <script src="fonks.js"></script>
+    <script>
+      $("#send").click(function () {
+        predict($("#prompt").val());
+      });
+    </script>
+  </body>
+</html>
