@@ -1,7 +1,6 @@
 # Stable Diffusion Outpainting with VanillaJS
 
-![ice_video_20221007-230047](https://user-images.githubusercontent.com/35695543/194643913-961bb6fb-d6b2-4eea-bef1-c5db496ff875.gif)
-
+![ice_video_20221009-032440_edit_0](https://user-images.githubusercontent.com/35695543/194732095-1706e2b5-53e4-4638-bb19-169fd8e515c6.gif)
 
 
 Readme will be edited soon. 
