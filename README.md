@@ -9,3 +9,6 @@ Readme will be edited soon.
 
 2) Clone this repo, start it with Live server, have fun. All PR 's are welcome
 
+
+
+[![Outpainting Front End - Masking Server Done](http://img.youtube.com/vi/5cuI1r8U45E/0.jpg)](http://www.youtube.com/watch?v=5cuI1r8U45E "Outpainting Front End - Masking Server Done")
