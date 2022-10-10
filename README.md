@@ -11,4 +11,4 @@ Readme will be edited soon.
 
 
 
-[![Outpainting Front End - Masking Server Done](http://img.youtube.com/vi/5cuI1r8U45E/0.jpg)](http://www.youtube.com/watch?v=5cuI1r8U45E "Outpainting Front End - Masking Server Done")
+[![Outpainting Front End ](http://img.youtube.com/vi/28UTSLzAxD4/0.jpg)](http://www.youtube.com/watch?v=28UTSLzAxD4 "Outpainting Front End ")
