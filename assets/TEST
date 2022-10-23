@@ -1,0 +1,93 @@
+ let backstage = new Konva.Image({
+              width: img.width,
+              height: img.height,
+
+              image: img,
+            });
+
+            layer.add(backstage);
+
+
+
+
+
+
+
+
+
+            <script>
+            var canvas;
+            var context;
+            var ctx2;
+            var s;
+            function init() {
+              // var image = document.getElementById("image");
+              //  canvas = document.getElementById("main");
+        
+              const img = new Image();
+              img.crossOrigin = "anonymous";
+              img.src = "./original.png";
+              const canvas = document.getElementById("main");
+              context = canvas.getContext("2d");
+              img.addEventListener("load", () => {
+                context.drawImage(img, 0, 0);
+                img.style.display = "none";
+              });
+            }
+            function GetPixel(context, x, y) {
+              var p = context.getImageData(x, y, 1, 1).data;
+              var hex = "#" + ("000000" + p[0] + p[1] + p[2] + p[3]);
+              return hex;
+            }
+        
+            function drawImage(image) {
+              var canvas2 = document.createElement("canvas");
+              // Set the canvas the same width and height of the image
+              canvas2.width = image.width;
+              canvas2.height = image.height;
+              ctx2 = canvas2.getContext("2d");
+        
+              ctx2.drawImage(image, 0, 0);
+        
+              var imageData = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
+              var data = imageData.data;
+        
+              for (var i = 0; i < data.length; i += 4) {
+                if (data[i] == 255) {
+                  data[i] = data[i + 1] = data[i + 2] = 155; // alpha
+                } else {
+                  data[i] = data[i + 1] = data[i + 2] = 10; // alpha
+                }
+              }
+              // Update the canvas with the new data
+              ctx2.putImageData(imageData, 0, 0);
+              context.drawImage(canvas2, 0, 0);
+            }
+        
+            window.addEventListener("load", init);
+          </script>
+
+
+
+
+
+
+
+          
+          for (let x = 0; x <= img.width; x++) {
+            let latest;
+            for (let y = 0; y <= img.height; y++) {
+              let color = img.get(x, y);
+              let r = color[0],
+                g = color[1],
+                b = color[2],
+                a = color[3];
+              let sum = r + g + b + a;
+
+              if (sum == latest) {
+              } else {
+                latest = sum;
+                rect(x, y, 5, 5);
+              }
+            }
+          }

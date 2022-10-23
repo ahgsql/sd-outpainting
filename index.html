@@ -5,37 +5,370 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Out</title>
+    <link rel="stylesheet" href="style.css" />
     <style>
-      body {
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-      .interact {
-        position: absolute;
-        z-index: 5;
-        background-color: whitesmoke;
-        padding: 15pt;
-        border-radius: 10%;
-        left: 29%;
-        top: 10px;
-        width: 50%;
-        font-size: 15pt;
-      }
-      .interact input {
-        width: 90%;
-        font-size: 15pt;
-      }
-      .interact button {
-        font-size: 15pt;
+      #stage-parent {
+        width: 100%;
       }
     </style>
   </head>
   <body>
-    <div class="interact">
-      <input type="text" style="" id="prompt" />
-      <button id="send">Predict</button>
+    <div class="image-prompt-form-wrapper">
+      <form class="image-prompt-form desktop">
+        <input
+          autocomplete="off"
+          type="text"
+          class="text-input text-input-medium text-input-outlined image-prompt-input"
+          placeholder="A digital Illustration of the Babel tower, 4k, detailed, trending in artstation, fantasy vivid colors"
+          maxlength="200"
+          value=""
+          id="prompt"
+        /><button
+          id="send"
+          tabindex="0"
+          class="btn btn-large btn-filled btn-secondary image-prompt-btn"
+          type="button"
+          aria-label="Submit prompt"
+        >
+          <span class="btn-label-wrap"
+            ><span class="btn-label-inner">Generate‍</span></span
+          >
+        </button>
+        <button
+          id="save"
+          style="display: none"
+          tabindex="0"
+          class="btn btn-large btn-filled btn-secondary image-prompt-btn"
+          type="button"
+        >
+          <span class="btn-label-wrap"
+            ><span class="btn-label-inner">Save Image</span></span
+          >
+        </button>
+      </form>
+      <div
+        class="select-frame-toolbar snipcss-anHvT"
+        id="selector"
+        style="display: none"
+      >
+        <button
+          tabindex="0"
+          id="previousImg"
+          class="btn btn-alwaysmedium btn-filled btn-primary snip-button"
+          type="button"
+        >
+          <span class="btn-label-wrap">
+            <span class="btn-label-inner">
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 20 20"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              ‍
+            </span>
+          </span>
+        </button>
+        <div class="select-frame-toolbar-separator"></div>
+        <span class="btn-label-wrap">
+          <span class="btn-label-inner" id="currentIndex"> ...‍</span>
+        </span>
+        <div class="select-frame-toolbar-separator"></div>
+
+        <button
+          tabindex="0"
+          class="btn btn-alwaysmedium btn-filled btn-primary snip-button"
+          type="button"
+          id="nextImg"
+        >
+          <span class="btn-label-wrap">
+            <span class="btn-label-inner">
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 20 20"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              ‍
+            </span>
+          </span>
+        </button>
+        <div class="select-frame-toolbar-separator"></div>
+        <button
+          tabindex="0"
+          class="btn btn-alwaysmedium btn-filled btn-primary snip-button"
+          type="button"
+          id="btnCancel"
+        >
+          <span class="btn-label-wrap">
+            <span class="btn-label-inner"> Cancel‍ </span>
+          </span>
+        </button>
+        <div class="select-frame-toolbar-separator"></div>
+        <button
+          tabindex="0"
+          class="btn btn-alwaysmedium btn-filled btn-primary snip-button"
+          type="button"
+          id="btnAccept"
+        >
+          <span class="btn-label-wrap">
+            <span class="btn-label-inner"> Accept‍ </span>
+          </span>
+        </button>
+      </div>
+
+      <div
+        style="position: fixed; bottom: 30px; right: 30px"
+        class="image-editor-zoom-controls snipcss-PawtR tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center"
+      >
+        <div
+          class="btn-group image-editor-tool-interactive tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center"
+        >
+          <button
+            tabindex="0"
+            style="width: unset"
+            class="btn btn-icon btn-filled btn-secondary tether-target-attached-top tether-element-attached-top"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap"
+              ><span class="btn-label-inner" id="scaleHelpText">52%‍</span
+              ><span class="btn-node"></span
+            ></span>
+          </button>
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-secondary snip-button"
+            type="button"
+            id="btnZoomOut"
+            aria-label="Zoom out"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-node">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.25 10A.75.75 0 0 1 5 9.25h10a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </span>
+            </span>
+          </button>
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-secondary tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center snip-button"
+            type="button"
+            id="btnZoomIn"
+            aria-label="Zoom in"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-node">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M10.75 6a.75.75 0 0 0-1.5 0v3.25H6a.75.75 0 0 0 0 1.5h3.25V14a.75.75 0 0 0 1.5 0v-3.25H14a.75.75 0 0 0 0-1.5h-3.25V6Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- EDITOR TOOLBAR -->
+
+      <div
+        style="position: fixed; bottom: 30px"
+        class="image-editor-toolbar image-editor-tool-interactive snipcss-5zVWN"
+      >
+        <div class="btn-group">
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-primary snip-button toolbar"
+            type="button"
+            role="select"
+            aria-label="Select"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-label-inner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.823 2.351a.75.75 0 0 1 .817.043l11.958 8.707a.75.75 0 0 1-.478 1.356l-6.647-.32-3.046 5.917a.75.75 0 0 1-1.413-.264L4.453 3.08a.75.75 0 0 1 .37-.729Zm2.418 12.786 2.119-4.116a.75.75 0 0 1 .703-.406l4.624.223L6.122 4.6l1.119 10.536Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                ‍
+              </span>
+            </span>
+          </button>
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-secondary snip-button toolbar"
+            type="button"
+            role="pan"
+            aria-label="Pan"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-label-inner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M9.613 1a2.25 2.25 0 0 0-2.247 2.13 2.25 2.25 0 0 0-3.003 2.12v3.544a2.495 2.495 0 0 0-2.116 4.498l2.13 1.23A4.326 4.326 0 0 0 8.687 18.5h4.157a5.018 5.018 0 0 0 5.018-5.018V6.25a2.25 2.25 0 0 0-3.004-2.12 2.25 2.25 0 0 0-3.24-1.9A2.25 2.25 0 0 0 9.613 1Zm-.75 4.248V3.25a.75.75 0 0 1 1.5-.013V8.75h1.5V4.244a.75.75 0 0 1 1.5.006v4.5h1.5v-2.5a.75.75 0 0 1 1.5 0v7.232A3.518 3.518 0 0 1 12.845 17H8.688a2.826 2.826 0 0 1-2.825-2.826v-.527l-2.866-1.654a.994.994 0 0 1 .994-1.722l1.872 1.08V5.25a.75.75 0 0 1 1.5-.013V8.75h1.5V5.248Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                ‍
+              </span>
+            </span>
+          </button>
+        </div>
+        <div class="btn-group">
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-secondary snip-button toolbar"
+            type="button"
+            role="erase"
+            aria-label="Erase"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-label-inner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M10.442 2.013a1.75 1.75 0 0 1 2.475 0l5.58 5.58a1.75 1.75 0 0 1 0 2.475l-4.504 4.505-2.178 2.177H14.5a.75.75 0 0 1 0 1.5h-13a.75.75 0 0 1 0-1.5h4.345l-3.832-3.833a1.75 1.75 0 0 1 0-2.475l8.43-8.43ZM7.967 16.75h1.727l2.177-2.177-5.933-5.934-2.865 2.864a.25.25 0 0 0 0 .354l4.894 4.893Zm4.965-3.238L6.998 7.578l4.505-4.505a.25.25 0 0 1 .354 0l5.58 5.58a.25.25 0 0 1 0 .354l-4.505 4.505Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                ‍
+              </span>
+            </span>
+          </button>
+          <button
+            tabindex="0"
+            class="btn btn-icon btn-filled btn-secondary snip-button toolbar"
+            type="button"
+            role="addframe"
+            aria-label="Add generation frame"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-label-inner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.25 2a.75.75 0 0 0-1.5 0v1.25H1.5a.75.75 0 0 0 0 1.5h1.25V6a.75.75 0 0 0 1.5 0V4.75H5.5a.75.75 0 0 0 0-1.5H4.25V2Zm-1.5 7v6.235c0 .345 0 .661.028.922.031.285.102.591.306.872.108.148.239.279.387.387.281.204.588.275.872.306.26.028.577.028.922.028h9.47c.345 0 .661 0 .922-.028.284-.031.591-.102.872-.306.148-.108.279-.239.387-.387.204-.281.275-.587.306-.872.028-.26.028-.577.028-.922v-9.47c0-.345 0-.661-.028-.922-.031-.284-.102-.591-.306-.872a1.75 1.75 0 0 0-.387-.387c-.281-.204-.588-.275-.872-.306-.26-.028-.577-.028-.922-.028H8.5v1.5h6.2c.392 0 .625.001.796.02.1.01.141.024.153.03.02.014.037.031.052.05a.602.602 0 0 1 .03.154c.018.17.019.404.019.796v9.4c0 .392-.001.625-.02.796a.6.6 0 0 1-.03.153.252.252 0 0 1-.05.052.6.6 0 0 1-.154.03c-.17.018-.404.019-.796.019H5.3c-.392 0-.625-.001-.796-.02a.601.601 0 0 1-.153-.03.251.251 0 0 1-.052-.05.596.596 0 0 1-.03-.154 8.463 8.463 0 0 1-.019-.796V9h-1.5Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                ‍
+              </span>
+            </span>
+          </button>
+          <button
+            tabindex="0"
+            role="upload"
+            class="btn btn-icon btn-filled btn-secondary snip-button toolbar"
+            type="button"
+            aria-label="Upload image"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="btn-label-wrap">
+              <span class="btn-label-inner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M14.75 3a.75.75 0 0 0-1.5 0v2.25H11a.75.75 0 0 0 0 1.5h2.25V9a.75.75 0 0 0 1.5 0V6.75H17a.75.75 0 0 0 0-1.5h-2.25V3ZM9 4.25H4.765c-.345 0-.661 0-.922.028-.284.031-.591.102-.872.306a1.75 1.75 0 0 0-.387.387c-.204.281-.275.588-.306.872-.028.26-.028.577-.028.922v8.47c0 .345 0 .661.028.922.031.285.102.591.306.872.108.148.239.279.387.387.281.204.588.275.872.306.26.028.577.028.922.028h10.47c.345 0 .661 0 .922-.028.285-.031.591-.102.872-.306.148-.108.279-.239.387-.387.204-.281.275-.587.306-.872.028-.26.028-.577.028-.922V11h-1.5v4.2c0 .392-.001.625-.02.796a.6.6 0 0 1-.03.153.252.252 0 0 1-.05.052.6.6 0 0 1-.154.03c-.056.006-.119.01-.192.013L11.03 11.47a.75.75 0 0 0-1.06 0l-.97.97-2.47-2.47a.75.75 0 0 0-1.06 0l-1.72 1.72V6.8c0-.392.001-.625.02-.796.01-.1.024-.141.03-.153a.247.247 0 0 1 .05-.051.598.598 0 0 1 .154-.03c.17-.019.404-.02.796-.02H9v-1.5Zm1.5 8.81 3.19 3.19H4.8c-.392 0-.625-.001-.796-.02a.602.602 0 0 1-.153-.03.251.251 0 0 1-.052-.05.596.596 0 0 1-.03-.154 8.463 8.463 0 0 1-.019-.796v-1.39L6 11.56l2.47 2.47a.75.75 0 0 0 1.06 0l.97-.97Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                ‍
+              </span>
+            </span>
+          </button>
+          <input type="file" accept="image/*" class="file-picker-input" />
+        </div>
+      </div>
     </div>
-    <div id="container" style="background-color: azure; padding: none"></div>
+    <div id="stage-parent">
+      <div id="container" style="background-color: azure; padding: none"></div>
+    </div>
+
     <script src="konva.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
@@ -45,8 +378,76 @@
     <script src="stage.js"></script>
     <script src="fonks.js"></script>
     <script>
+      var canDrag = true;
+      var mode = "txt2img";
       $("#send").click(function () {
-        predict($("#prompt").val());
+        if (mode == "txt2img") {
+          predict({
+            prompt: $("#prompt").val(),
+            sampler: "Euler a",
+            steps: 20,
+          });
+          mode = "outpaint";
+          $("#send").text("Outpaint");
+        } else if ((mode = "outpaint")) {
+          let oldScale = stage.scale();
+          stage.scale({ x: 1, y: 1 });
+          let placeX = controller.attrs.x,
+            placeY = controller.attrs.y;
+
+          let stageX = stage.position().x,
+            stageY = stage.position().y;
+          controller.visible(false);
+          bgLayer.visible(false);
+          bdImage.visible(false);
+          var image = stage.toImage({
+            x: placeX + stageX,
+            y: placeY + stageY,
+            width: 512,
+            height: 512,
+            pixelRatio: 1,
+            callback(img) {
+              let base64 = img.src.split(",")[1];
+              outpaint({
+                prompt: $("#prompt").val(),
+                image: base64,
+              });
+            },
+          });
+          controller.visible(true);
+          bgLayer.visible(true);
+          bdImage.visible(true);
+          stage.scale(oldScale);
+        }
+      });
+
+      $("#crop").click(function () {
+        let oldScale = stage.scale();
+        stage.scale({ x: 1, y: 1 });
+        let placeX = controller.attrs.x,
+          placeY = controller.attrs.y;
+
+        let stageX = stage.position().x,
+          stageY = stage.position().y;
+        controller.visible(false);
+
+        var image = stage.toImage({
+          x: placeX + stageX,
+          y: placeY + stageY,
+          width: 512,
+          height: 512,
+          pixelRatio: 1,
+          callback(img) {
+            $(".interact").prepend(img);
+            let base64 = img.src.split(",")[1];
+            console.log(base64);
+            setTimeout(() => {
+              img.remove();
+            }, 5500);
+          },
+        });
+        controller.visible(true);
+        stage.scale(oldScale);
       });
     </script>
   </body>

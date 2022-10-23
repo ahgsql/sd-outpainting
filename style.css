@@ -1,0 +1,850 @@
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100%;
+  overflow: hidden;
+}
+.interact {
+  position: absolute;
+  z-index: 5;
+  background-color: whitesmoke;
+  padding: 15pt;
+  border-radius: 10%;
+  left: 29%;
+  top: 10px;
+  width: 50%;
+  font-size: 15pt;
+}
+.interact input {
+  width: 90%;
+  font-size: 15pt;
+}
+.interact button {
+  font-size: 15pt;
+}
+@font-face {
+  font-family: ColfaxAI;
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
+      format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff)
+      format("woff");
+}
+@font-face {
+  font-family: ColfaxAI;
+  font-style: italic;
+  font-weight: 400;
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegularItalic.woff2)
+      format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIRegularItalic.woff)
+      format("woff");
+}
+@font-face {
+  font-family: ColfaxAI;
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2)
+      format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
+}
+@font-face {
+  font-family: ColfaxAI;
+  font-style: italic;
+  font-weight: 700;
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIBoldItalic.woff2)
+      format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIBoldItalic.woff)
+      format("woff");
+}
+* {
+  box-sizing: border-box;
+}
+
+.image-prompt-form-wrapper {
+  position: absolute;
+  z-index: 5;
+  width: 50%;
+  left: 29%;
+}
+
+@media (min-width: 768px) {
+  .image-prompt-form-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    z-index: 599;
+  }
+}
+
+.image-editor-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  left: 0;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.transition-contents {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.edit-page {
+  display: flex;
+  flex-direction: column;
+  padding: var(--page-padding);
+}
+
+.transition-container {
+  flex: 1 1;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+}
+
+.page-main {
+  display: flex;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+.page-wrapper {
+  align-items: stretch;
+  background-color: var(--page-background-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.route-container {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+#root {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  -webkit-font-feature-settings: â€œligaâ€, â€œkernâ€;
+  font-feature-settings: â€œligaâ€, â€œkernâ€;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #777;
+  color: var(--text-default);
+  font-family: ColfaxAI, Helvetica, sans-serif;
+  font-family: var(--sans-serif);
+  font-size: 15px;
+  height: 100%;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-feature-settings: â€œligaâ€, â€œkernâ€;
+  font-feature-settings: â€œligaâ€, â€œkernâ€;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #777;
+  color: var(--text-default);
+  font-family: ColfaxAI, Helvetica, sans-serif;
+  font-family: var(--sans-serif);
+  font-size: 15px;
+  height: 100%;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --btn-radius: 6px;
+  --page-padding: 20px;
+  --image-prompt-input-height: 44px;
+  --original-image-padding: 6px;
+  --b100: #000;
+  --b60: #777;
+  --b50: #999;
+  --b20: #ececf1;
+  --b10: #fafafc;
+  --b0: #fff;
+  --blue600: #00f;
+  --text-default: var(--b60);
+  --page-background-color: var(--b10);
+  --input-border: var(--b20);
+  --sans-serif: "ColfaxAI", Helvetica, sans-serif;
+}
+
+.image-prompt-form {
+  background: var(--b0);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 82, 0.15);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.image-prompt-form.desktop {
+  align-items: center;
+  display: flex;
+  height: 44px;
+  height: var(--image-prompt-input-height);
+}
+
+.image-prompt-form.focused {
+  box-shadow: 0 5px 9px 0 rgba(0, 0, 82, 0.1);
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: ColfaxAI, Helvetica, sans-serif;
+  font-family: var(--sans-serif);
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  border-radius: var(--btn-radius);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1em;
+  margin: 0;
+  position: relative;
+  text-decoration: none;
+  transition: opacity 0.3s, box-shadow 0.3s, background-color 0.3s,
+    color 0.3s;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn-small {
+  font-size: 12px;
+  line-height: 13px;
+  padding: 7px 10px 6px;
+}
+
+.btn-filled {
+  color: var(--b0);
+}
+
+.image-prompt-help-tooltip-trigger {
+  border-radius: 4px;
+  line-height: 16px;
+  padding: 3px 8px;
+}
+
+.ml-3 {
+  margin-left: 12px;
+}
+
+.btn-secondary.btn-filled {
+  background-color: var(--b20);
+  color: var(--b100);
+}
+
+@media (min-width: 768px) {
+  .btn:hover {
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.text-input {
+  background-clip: padding-box;
+  background-color: #fff;
+  box-sizing: border-box;
+  color: var(--b100);
+  display: inline-block;
+  font-family: var(--sans-serif);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1em;
+  margin: 0;
+  resize: none;
+  vertical-align: top;
+  width: 200px;
+}
+
+.text-input-outlined {
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  padding: 13px 14px;
+}
+
+.image-prompt-input {
+  border: none;
+  flex: 1 1;
+  height: 100%;
+}
+
+.text-input:focus {
+  outline: 0;
+}
+
+.btn-large {
+  font-size: 14px;
+  line-height: 15px;
+  padding: 17px 18px 16px;
+}
+
+.image-prompt-btn {
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.desktop .image-prompt-btn {
+  align-items: center;
+  background-color: var(--b0);
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  font-size: 16px;
+  height: 100%;
+  padding-left: 14px;
+  padding-right: 16px;
+}
+
+.desktop
+  .image-prompt-btn.active-style:not(.btn-loading):not(.btn-disabled) {
+  background-color: var(--b100);
+  color: var(--b0);
+}
+
+.desktop .image-prompt-btn:hover {
+  background-color: var(--b100);
+  color: var(--b0);
+  opacity: 1;
+}
+
+.btn-label-wrap {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+
+.btn-label-inner {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+@font-face { 
+    font-family:ColfaxAI;
+    font-style:normal;
+    font-weight:400;
+    src:url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format("woff2"),url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
+  } 
+  @font-face { 
+    font-family:ColfaxAI;
+    font-style:italic;
+    font-weight:400;
+    src:url(https://cdn.openai.com/API/fonts/ColfaxAIRegularItalic.woff2) format("woff2"),url(https://cdn.openai.com/API/fonts/ColfaxAIRegularItalic.woff) format("woff");
+  } 
+  @font-face { 
+    font-family:ColfaxAI;
+    font-style:normal;
+    font-weight:700;
+    src:url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
+  } 
+  @font-face { 
+    font-family:ColfaxAI;
+    font-style:italic;
+    font-weight:700;
+    src:url(https://cdn.openai.com/API/fonts/ColfaxAIBoldItalic.woff2) format("woff2"),url(https://cdn.openai.com/API/fonts/ColfaxAIBoldItalic.woff) format("woff");
+  } 
+  * { 
+      box-sizing: border-box;
+  } 
+  
+  .image-editor-canvas { 
+      bottom: 0; 
+      left: 0; 
+      overflow: hidden; 
+      position: absolute; 
+      right: 0; 
+      top: 0;
+  } 
+  
+  .transition-contents { 
+      height: 100%; 
+      position: absolute; 
+      width: 100%;
+  } 
+  
+  .edit-page { 
+      display: flex; 
+      flex-direction: column; 
+      padding: var(--page-padding);
+  } 
+  
+  .transition-container { 
+      flex: 1 1;
+  } 
+  
+  .page { 
+      display: flex; 
+      flex-direction: column; 
+      overflow-y: auto; 
+      position: relative; 
+      width: 100%;
+  } 
+  
+  .page-main { 
+      display: flex; 
+      flex: 1 1 auto; 
+      overflow-x: hidden; 
+      overflow-y: auto; 
+      position: relative;
+  } 
+  
+  .page-wrapper { 
+      align-items: stretch; 
+      background-color: var(--page-background-color); 
+      display: flex; 
+      flex-direction: column; 
+      height: 100%; 
+      overflow-x: hidden;
+  } 
+  
+  .route-container { 
+      height: 100%; 
+      position: relative; 
+      z-index: 1;
+  } 
+  
+  #root { 
+      height: 100%; 
+      overflow: auto;
+  } 
+  
+  body { 
+      -webkit-font-feature-settings: â€œligaâ€,â€œkernâ€; 
+      font-feature-settings: â€œligaâ€,â€œkernâ€; 
+      text-rendering: optimizeLegibility; 
+      -webkit-font-smoothing: antialiased; 
+      -moz-osx-font-smoothing: grayscale; 
+      -webkit-tap-highlight-color: rgba(0,0,0,0); 
+      color: #777; 
+      color: var(--text-default); 
+      font-family: ColfaxAI,Helvetica,sans-serif; 
+      font-family: var(--sans-serif); 
+      font-size: 15px; 
+      height: 100%; 
+      line-height: 1.5em; 
+      margin: 0; 
+      padding: 0;
+  } 
+  
+  html { 
+      -webkit-font-feature-settings: â€œligaâ€,â€œkernâ€; 
+      font-feature-settings: â€œligaâ€,â€œkernâ€; 
+      text-rendering: optimizeLegibility; 
+      -webkit-font-smoothing: antialiased; 
+      -moz-osx-font-smoothing: grayscale; 
+      -webkit-tap-highlight-color: rgba(0,0,0,0); 
+      color: #777; 
+      color: var(--text-default); 
+      font-family: ColfaxAI,Helvetica,sans-serif; 
+      font-family: var(--sans-serif); 
+      font-size: 15px; 
+      height: 100%; 
+      line-height: 1.5em; 
+      margin: 0; 
+      padding: 0;
+  } 
+  
+  :root { 
+      --btn-radius:       6px;
+      --page-padding:   20px;
+      --image-prompt-input-height:  44px; 
+      --original-image-padding:  6px; 
+      --b100: #2e09ff; 
+      --b80: rgb(146, 134, 217); 
+      --b60: #777; 
+      --b50: #999; 
+      --b20: #ececf1; 
+      --b10: #fafafc; 
+      --b0: #fff; 
+      --blue600: #00f; 
+      --text-default: var(--b60); 
+      --page-background-color: var(--b10); 
+      --input-border: var(--b20); 
+      --sans-serif: "ColfaxAI",Helvetica,sans-serif; 
+  } 
+  
+  .select-frame-toolbar { 
+      align-items: center; 
+      background: var(--b100); 
+      border-radius: 6px; 
+      box-shadow: 0 4px 8px rgba(0,0,0,.2); 
+      color: var(--b0); 
+      display: flex; 
+      flex-direction: row; 
+      height: 36px; 
+      pointer-events: all; 
+      position: absolute; 
+    
+      -webkit-user-select: none; 
+      -ms-user-select: none; 
+      user-select: none;
+  } 
+  
+  *,:after,:before { 
+      box-sizing: border-box;
+  } 
+  
+  button { 
+      font-family: ColfaxAI,Helvetica,sans-serif; 
+      font-family: var(--sans-serif);
+  } 
+  
+  .btn { 
+      border: none; 
+      border-radius: 6px; 
+      border-radius: var(--btn-radius); 
+      box-sizing: border-box; 
+      cursor: pointer; 
+      display: inline-flex; 
+      font-weight: 700; 
+      justify-content: center; 
+      line-height: 1em; 
+      margin: 0; 
+      position: relative; 
+      text-decoration: none; 
+      transition: opacity .3s,box-shadow .3s,background-color .3s,color .3s; 
+      -webkit-user-select: none; 
+      -ms-user-select: none; 
+      user-select: none;
+  } 
+  
+  .btn-alwaysmedium { 
+      font-size: 14px; 
+      line-height: 15px; 
+      padding: 10px 15px;
+  } 
+  
+  .btn-filled { 
+      color: var(--b0);
+  } 
+  
+  .btn:focus { 
+      outline: none;
+  } 
+  
+  .btn-primary.btn-filled { 
+      background-color: var(--b100);
+  } 
+  
+  .select-frame-toolbar .btn  { 
+      font-weight: 400; 
+      white-space: nowrap;
+  } 
+  
+  @media (min-width: 768px){ 
+    .btn:hover { 
+      opacity: .6; 
+      text-decoration: none;
+    } 
+  }     
+  
+  .select-frame-toolbar-separator { 
+      background: var(--b80); 
+      height: 100%; 
+      width: 1px;
+  } 
+  
+  .gen-picker-options { 
+      align-items: center; 
+      display: flex; 
+      padding: 0 9px;
+  } 
+  
+  .btn-label-wrap { 
+      display:  flex; 
+      width:  100%;
+      align-items: center; 
+      justify-content: center; 
+      opacity: 1;
+  } 
+  
+  .gen-picker-option { 
+      cursor: pointer; 
+      padding: 6px 3px;
+  } 
+  
+  .btn-label-inner { 
+      align-items: center; 
+      display: flex; 
+      justify-content: center;
+  } 
+  
+  .gen-picker-option .gen-picker-option-circle  { 
+      background: var(--b80); 
+      border-radius: 100%; 
+      height: 6px; 
+      width: 6px;
+  } 
+  
+  .gen-picker-option.selected .gen-picker-option-circle  { 
+      background: var(--b0);
+  } 
+  
+  .gen-picker-option:hover .gen-picker-option-circle  { 
+      background: var(--b60);
+  } 
+  
+  .select-frame-toolbar .btn svg  { 
+      height: 1em; 
+      width: 1em;
+  } 
+  
+  
+  * { 
+    box-sizing: border-box;
+} 
+
+.image-editor-tool-layer { 
+    inset: 0px; 
+    opacity: 1; 
+    pointer-events: none; 
+    position: absolute; 
+    transition: opacity 0.3s ease-in-out 0s; 
+    z-index: 1;
+} 
+
+.image-editor { 
+    display: flex; 
+    flex: 1 1 0%; 
+    flex-direction: column; 
+    pointer-events: none; 
+    position: relative;
+} 
+
+.page { 
+    display: flex; 
+    flex-direction: column; 
+    overflow-y: auto; 
+    position: relative; 
+    width: 100%;
+} 
+
+.page-spacing { 
+    padding: var(--page-padding);
+} 
+
+.page-main { 
+    display: flex; 
+    flex: 1 1 auto; 
+    overflow: hidden auto; 
+    position: relative;
+} 
+
+.page-wrapper { 
+    align-items: stretch; 
+    background-color: var(--page-background-color); 
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+    overflow-x: hidden;
+} 
+
+.route-container { 
+    height: 100%; 
+    position: relative; 
+    z-index: 1;
+} 
+
+#root { 
+    height: 100%; 
+    overflow: auto;
+} 
+
+body { 
+    text-rendering: optimizelegibility; 
+    -webkit-font-smoothing: antialiased; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+    color: var(--text-default); 
+    font-family: var(--sans-serif); 
+    font-size: 15px; 
+    height: 100%; 
+    line-height: 1.5em; 
+    margin: 0px; 
+    padding: 0px;
+} 
+
+html { 
+    text-rendering: optimizelegibility; 
+    -webkit-font-smoothing: antialiased; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+    color: var(--text-default); 
+    font-family: var(--sans-serif); 
+    font-size: 15px; 
+    height: 100%; 
+    line-height: 1.5em; 
+    margin: 0px; 
+    padding: 0px;
+} 
+
+:root { 
+    --btn-icon-size:       35px; 
+    --btn-radius:       6px;
+    --page-padding:   20px;
+    --image-prompt-input-height:  44px; 
+    --original-image-padding:  6px; 
+    --b100: #000; 
+    --b60: #777; 
+    --b50: #999; 
+    --b20: #ececf1; 
+    --b10: #fafafc; 
+    --b0: #fff; 
+    --blue600: #00f; 
+    --text-default: var(--b60); 
+    --page-background-color: var(--b10); 
+    --sans-serif: "ColfaxAI",Helvetica,sans-serif; 
+} 
+
+.image-editor-toolbar { 
+    align-items: center; 
+    bottom: 0px; 
+    display: flex; 
+    gap: 12px; 
+    left: 50%; 
+    position: absolute; 
+    transform: translateX(-50%); 
+    user-select: none;
+} 
+
+.image-editor-tool-layer:not(.hidden) .image-editor-tool-interactive { 
+    pointer-events: auto;
+} 
+
+*,:after,:before { 
+    box-sizing: border-box;
+} 
+
+.btn-group { 
+    align-items: center; 
+    background: var(--b0); 
+    border-radius: var(--btn-radius); 
+    display: flex; 
+    flex-direction: row; 
+    gap: 1px;
+} 
+
+button { 
+    font-family: var(--sans-serif);
+} 
+
+.btn { 
+    border: none; 
+    border-radius: var(--btn-radius); 
+    box-sizing: border-box; 
+    cursor: pointer; 
+    display: inline-flex; 
+    font-weight: 700; 
+    justify-content: center; 
+    line-height: 1em; 
+    margin: 0px; 
+    position: relative; 
+    text-decoration: none; 
+    transition: opacity 0.3s ease 0s, box-shadow 0.3s ease 0s, background-color 0.3s ease 0s, color 0.3s ease 0s; 
+    user-select: none;
+} 
+
+.btn-icon { 
+    align-items: center; 
+    height: var(--btn-icon-size); 
+    justify-content: center; 
+    width: var(--btn-icon-size);
+} 
+
+.btn-filled { 
+    color: var(--b0);
+} 
+
+.btn-primary.btn-filled { 
+    background-color: var(--b100);
+} 
+
+.btn-group .btn  { 
+    border-radius: 0px; 
+    margin: 0px !important;
+} 
+
+.btn-group .btn:first-of-type  { 
+    border-bottom-left-radius: var(--btn-radius); 
+    border-top-left-radius: var(--btn-radius);
+} 
+
+@media (min-width: 768px){ 
+  .btn:hover { 
+    opacity: 0.6; 
+    text-decoration: none;
+  } 
+}     
+
+.image-editor-toolbar .btn-primary:hover  { 
+    opacity: 1;
+} 
+
+.btn-secondary.btn-filled { 
+    background-color:  var(--b20);
+    color: var(--b100);
+} 
+
+.btn:not(.btn-full) + .btn { 
+    margin-left: 8px;
+} 
+
+.btn-group .btn:last-of-type  { 
+    border-bottom-right-radius: var(--btn-radius); 
+    border-top-right-radius: var(--btn-radius);
+} 
+
+.file-picker-input { 
+    display: none;
+} 
+
+.btn-label-wrap { 
+    display:  flex; 
+    width:  100%;
+    align-items: center; 
+    justify-content: center; 
+    opacity: 1;
+} 
+
+.btn-label-inner { 
+    align-items: center; 
+    display: flex; 
+    justify-content: center;
+} 
+
+
